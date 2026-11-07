@@ -1,0 +1,74 @@
+# Packaging for Windows, macOS and Linux (electron-builder).
+# Build locally for the current OS with `npm run dist`; CI builds all three
+# (.github/workflows/build.yml).
+appId: com.wurmmaps.babelwurm
+productName: BabelWurm
+copyright: "Copyright © 2026 Jason Bloomer — MIT License"
+directories:
+  output: release
+  buildResources: build
+files:
+  - dist/**/*
+  - "!dist/**/*.map"
+  - package.json
+  # OCR engine: the *.wasm.js files are browser-only copies with the engine inlined (~25 MB); Node loads *.js + *.wasm
+  - "!**/tesseract.js-core/*.wasm.js"
+extraResources:
+  - from: resources
+    to: .
+    filter:
+      - sounds/**
+      - icons/**
+      - ocr/**
+asar: true
+afterPack: scripts/afterPack.mjs
+# tesseract.js starts its OCR worker from files on disk
+asarUnpack:
+  - node_modules/tesseract.js/**
+  - node_modules/tesseract.js-core/**
+
+win:
+  icon: build/icon.ico
+  # used by the zip target: unzip anywhere and run "BabelWurm.exe" (no launcher, no temp extraction)
+  artifactName: BabelWurm-${version}-win-${arch}.${ext}
+  target:
+    - target: nsis
+      arch: [x64]
+    - target: portable
+      arch: [x64]
+    - target: zip
+      arch: [x64]
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  shortcutName: BabelWurm
+  artifactName: BabelWurm-Setup-${version}.${ext}
+portable:
+  # the portable exe keeps its settings next to itself
+  artifactName: BabelWurm-Portable-${version}.${ext}
+
+mac:
+  icon: build/icon.png
+  category: public.app-category.games
+  target:
+    - target: dmg
+      arch: [universal]
+    - target: zip
+      arch: [universal]
+  # unsigned build; see README for how to open it the first time
+  identity: null
+  artifactName: BabelWurm-${version}-mac.${ext}
+
+linux:
+  icon: build/icon.png
+  category: Game
+  synopsis: BabelWurm — real-time chat translator for Wurm Online
+  maintainer: Jason Bloomer <support@wurmmaps.com>
+  target:
+    - AppImage
+    - deb
+    - tar.gz
+  artifactName: BabelWurm-${version}-linux-${arch}.${ext}
+publish: []

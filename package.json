@@ -1,0 +1,49 @@
+{
+  "name": "babelwurm",
+  "productName": "BabelWurm",
+  "version": "2.0.0",
+  "description": "BabelWurm \u2014 real-time chat translator for Wurm Online: every chat in its own tab, translated into your language, plus an on-screen text magnifier.",
+  "main": "dist/main/main.js",
+  "author": {
+    "name": "Jason Bloomer",
+    "email": "support@wurmmaps.com",
+    "url": "https://jasonbloomer.com"
+  },
+  "license": "MIT",
+  "homepage": "https://wurmmaps.com/BabelWurm",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jason-Bloomer/BabelWurm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Jason-Bloomer/BabelWurm/issues",
+    "email": "support@wurmmaps.com"
+  },
+  "updateRepo": "Jason-Bloomer/BabelWurm",
+  "scripts": {
+    "build": "node build.mjs",
+    "watch": "node build.mjs --watch",
+    "start": "node build.mjs && electron .",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test test/*.test.ts",
+    "console": "node build.mjs && node dist/cli/cli.js",
+    "dist": "node build.mjs && electron-builder",
+    "dist:win": "node build.mjs && electron-builder --win",
+    "dist:mac": "node build.mjs && electron-builder --mac",
+    "dist:linux": "node build.mjs && electron-builder --linux"
+  },
+  "dependencies": {
+    "tesseract.js": "^7.0.0"
+  },
+  "devDependencies": {
+    "@tesseract.js-data/eng": "^1.0.0",
+    "@types/node": "^22.10.0",
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8",
+    "esbuild": "^0.24.0",
+    "preact": "^10.25.0",
+    "resedit": "^2.0.3",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
